@@ -54,7 +54,11 @@ const drawGraph = (props: DrawGraphProps) => {
               // NOTE: disables parent-child rendering in the diagram
               // const parentNode = parent === null ? defaultParent : vertexIndex[parent] ?? defaultParent
               const parentNode = defaultParent
-              const style = getStyle(element.type)
+              let style = getStyle(element.type)
+              if (typeof style === 'string' && !style.includes('fontSize')) {
+                // set default fontSize = 10
+                style = `${style};fontSize=9;`
+              }
               if (style === null && ((element?.type) != null)) {
                 throw Error(`null style for element type ${element?.type ?? 'undefined'}`)
               }
