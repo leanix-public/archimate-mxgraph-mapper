@@ -54,43 +54,25 @@ const drawGraph = (props: DrawGraphProps) => {
               // NOTE: disables parent-child rendering in the diagram
               // const parentNode = parent === null ? defaultParent : vertexIndex[parent] ?? defaultParent
               const parentNode = defaultParent
-              let style = getStyle(element.type)
-              if (typeof style === 'string' && !style.includes('fontSize')) {
+              let style = getStyle(element.type) ?? ''
+              if (typeof style === 'string') {
+                if ((element?.children?.length ?? 0) > 0) {
+                  style = `${style};verticalAlign=top;space=10;`
+                }
                 // set default fontSize = 10
-                style = `${style};fontSize=9;`
+                if (!style.includes('fontSize')) style = `${style};fontSize=9;whiteSpace=wrap;`
               }
               if (style === null && ((element?.type) != null)) {
                 throw Error(`null style for element type ${element?.type ?? 'undefined'}`)
               }
-              if (style !== null && geometry !== null) vertexIndex[id] = _graph.insertVertex(parentNode, id, name, ...geometry, style)
+
+              if (style !== null && geometry !== null && !element.isOmmited) vertexIndex[id] = _graph.insertVertex(parentNode, id, name, ...geometry, style)
             })
 
           const connectorBuilder = new ConnectorBuilder(diagram)
-          /*
-          const elementIndex = diagram.elements
-            .reduce((accumulator: Record<string, Element>, element) => ({ ...accumulator, [element.id]: element }), {})
-          const catiaConnectors = diagram.connectors
-            .filter(connector => connector.start === 'EAID-FC7F83E1-5B24-43e3-9A88-5116D9E284C6')
-            .sort((connectorA, connectorB) => {
-              const A = connectorA?.sourcePoint?.x ?? 0
-              const B = connectorB?.sourcePoint?.x ?? 0
-              return A - B
-            })
-            .map(connector => {
-              const { start, end, sourcePoint, targetPoint } = connector
-              const { [start ?? '']: source, [end ?? '']: target } = elementIndex
-              return {
-                name: `${source.name ?? ''} -> ${target.name ?? ''}`,
-                sourcePoint: sourcePoint?.x,
-                targetPoint: targetPoint?.x,
-                sourceRect: source.rect,
-                targetRect: target.rect
-              }
-            })
-          console.log('CATIA CONNECTORS', JSON.parse(JSON.stringify(catiaConnectors)))
-          */
           diagram.connectors
             .forEach((connector: Connector) => {
+              if (connector.type === null) return
               const sourceVertex = vertexIndex[connector.start]
               const targetVertex = vertexIndex[connector.end]
               const style = connectorBuilder.getConnectorStyle(connector)

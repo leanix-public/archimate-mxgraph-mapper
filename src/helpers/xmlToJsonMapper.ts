@@ -161,6 +161,9 @@ const mapExtensionElement = (_element: any, model: Model) => {
   if (properties !== null) {
     const documentation = properties?.$?.documentation ?? null
     if (type === 'uml:Note') name = documentation
+    if (type === 'uml:Text') {
+      console.warn('uml:Text', _element)
+    }
   }
   const element: ExtensionElement = { id: mapId(id), type, name, connectors: links }
   return element
@@ -328,7 +331,6 @@ export const mapExportedDocument = async (rawDocument: string): Promise<Exported
             type = extensionElementIndex[diagramElement.id].type
           }
           const element: Element = { ...diagramElement, type, category, name, hierarchyLevel, parent, children, connectors, isOmmited, notes }
-          if (type === 'uml:Note') console.log('diagramElement', diagramElement, extensionElementIndex[diagramElement.id])
           accumulator[element.id] = element
           return accumulator
         }, {})
@@ -374,7 +376,6 @@ export const mapExportedDocument = async (rawDocument: string): Promise<Exported
       const elements = Object.values(elementIndex)
         .filter(element => connectorIndex[element.id] === undefined)
         .map(element => {
-          console.log('ELEMENT TYPE', element.type)
           if (element.type === null) element.notes.push('element has no type')
           if (element.name === null) element.notes.push('element has no name')
           if (element.rect === null) element.notes.push('element has no geometry')
@@ -384,6 +385,17 @@ export const mapExportedDocument = async (rawDocument: string): Promise<Exported
         .sort(({ seqno: A = 0 }, { seqno: B = 0 }) => A > B ? -1 : A < B ? 1 : 0)
 
       const connectors = Object.values(connectorIndex)
+        .filter(connector => {
+          const { direction, start, end } = connector
+          const startElement = elements.find(({ id }) => id === start) ?? null
+          const endElement = elements.find(({ id }) => id === end) ?? null
+          if (direction === ConnectorDirection.DIRECT && ((startElement?.children?.includes(end)) ?? false)) {
+            return false
+          } else if (direction === ConnectorDirection.REVERSE && ((endElement?.children?.includes(start)) ?? false)) {
+            return false
+          }
+          return true
+        })
       const diagram: Diagram = { ...extensionDiagram, elements, connectors }
       return diagram
     })
