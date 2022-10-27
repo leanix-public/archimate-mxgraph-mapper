@@ -1,7 +1,7 @@
 {
   "name": "archimate-mxgraph-mapper",
   "author": "LeanIX GmbH",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "private": true,
   "main": "electron/electron.js",
   "repository": {
@@ -77,7 +77,7 @@
     "wait-on": "^6.0.0"
   },
   "build": {
-    "appId": "com.fazendadosoftware.archimateMxgraphMapper",
+    "appId": "net.leanix.archimateMxgraphMapper",
     "productName": "Archimate MXGraph Mapper",
     "copyright": "Copyright © 2021 ${author}",
     "mac": {

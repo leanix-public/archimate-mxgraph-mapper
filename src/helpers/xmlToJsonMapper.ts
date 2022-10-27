@@ -125,7 +125,7 @@ const mapModel = (xmi: any) => {
 const mapExtensionElement = (_element: any, model: Model) => {
   // skipped properties: code, extendedProperties, flags, model, packageproperties, paths, project
   // properties, style, , tags, times
-  let { $, links: [links] = [null], properties: [properties] } = _element ?? {}
+  let { $, links: [links] = [null], properties: [properties] = [null] } = _element ?? {}
   let { name = null, 'xmi:idref': id = null, 'xmi:type': type = null } = $
   // if (type === 'uml:Note') name = documentation
   if (links !== null) {
