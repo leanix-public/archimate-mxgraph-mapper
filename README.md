@@ -6,7 +6,7 @@
 ## Binaries
 * [Windows](https://github.com/leanix-public/archimate-mxgraph-mapper/releases/download/v0.8.4/Archimate-MXGraph-Mapper-Setup-0.8.4.exe)
 * [Mac](https://github.com/leanix-public/archimate-mxgraph-mapper/releases/download/v0.8.4/Archimate-MXGraph-Mapper-0.8.4.dmg)
-* [Linux](https://github.com/leanix-public/archimate-mxgraph-mapper/releases/download/v0.8.2/Archimate-MXGraph-Mapper-0.8.4.AppImage)
+* [Linux](https://github.com/leanix-public/archimate-mxgraph-mapper/releases/download/v0.8.4/Archimate-MXGraph-Mapper-0.8.4.AppImage)
 
 # Scripts
 
