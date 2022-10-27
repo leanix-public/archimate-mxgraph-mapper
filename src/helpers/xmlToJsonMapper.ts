@@ -125,8 +125,9 @@ const mapModel = (xmi: any) => {
 const mapExtensionElement = (_element: any, model: Model) => {
   // skipped properties: code, extendedProperties, flags, model, packageproperties, paths, project
   // properties, style, , tags, times
-  let { $, links: [links] = [null] } = _element ?? {}
-  const { name = null, 'xmi:idref': id = null, 'xmi:type': type = null } = $
+  let { $, links: [links] = [null], properties: [properties] = [null] } = _element ?? {}
+  let { name = null, 'xmi:idref': id = null, 'xmi:type': type = null } = $
+  // if (type === 'uml:Note') name = documentation
   if (links !== null) {
     links = Object.entries<Array<{ $: any }>>(links)
       .reduce((accumulator: Connector[], [_category, links]) => {
@@ -156,6 +157,13 @@ const mapExtensionElement = (_element: any, model: Model) => {
           })
         return accumulator
       }, [])
+  }
+  if (properties !== null) {
+    const documentation = properties?.$?.documentation ?? null
+    if (type === 'uml:Note') name = documentation
+    if (type === 'uml:Text') {
+      console.warn('uml:Text', _element)
+    }
   }
   const element: ExtensionElement = { id: mapId(id), type, name, connectors: links }
   return element
@@ -293,7 +301,6 @@ export const mapExportedDocument = async (rawDocument: string): Promise<Exported
       accumulator[element.id] = element
       return accumulator
     }, {})
-
   const connectorDirectionIndex = extension.connectors
     .reduce((accumulator: Record<string, string>, connector) => {
       accumulator[connector.id] = connector.direction
@@ -312,13 +319,17 @@ export const mapExportedDocument = async (rawDocument: string): Promise<Exported
       const elementIndex = extensionDiagram.elements
         .reduce((accumulator: Record<string, Element>, diagramElement) => {
           diagramElement = { ...diagramElement, id: mapId(diagramElement.id) }
-          const { [diagramElement.id]: { type = null, category = null } = { type: null, category: null } } = model.elementIndex
+          let { [diagramElement.id]: { type = null, category = null } = { type: null, category: null } } = model.elementIndex
           const {
             [diagramElement.id]: { hierarchyLevel, parent, children } = { hierarchyLevel: 0, parent: null, children: null }
           } = model.packagedElementIndex
           const { [diagramElement.id]: { name = null, connectors = null } = {} } = extensionElementIndex
           const isOmmited = false
           const notes: string[] = []
+          if (type === null && extensionElementIndex[diagramElement.id] !== undefined) {
+            // Include type for UML elements such as Boundary and Note
+            type = extensionElementIndex[diagramElement.id].type
+          }
           const element: Element = { ...diagramElement, type, category, name, hierarchyLevel, parent, children, connectors, isOmmited, notes }
           accumulator[element.id] = element
           return accumulator
@@ -374,6 +385,17 @@ export const mapExportedDocument = async (rawDocument: string): Promise<Exported
         .sort(({ seqno: A = 0 }, { seqno: B = 0 }) => A > B ? -1 : A < B ? 1 : 0)
 
       const connectors = Object.values(connectorIndex)
+        .filter(connector => {
+          const { direction, start, end } = connector
+          const startElement = elements.find(({ id }) => id === start) ?? null
+          const endElement = elements.find(({ id }) => id === end) ?? null
+          if (direction === ConnectorDirection.DIRECT && ((startElement?.children?.includes(end)) ?? false)) {
+            return false
+          } else if (direction === ConnectorDirection.REVERSE && ((endElement?.children?.includes(start)) ?? false)) {
+            return false
+          }
+          return true
+        })
       const diagram: Diagram = { ...extensionDiagram, elements, connectors }
       return diagram
     })
