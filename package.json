@@ -77,9 +77,9 @@
     "wait-on": "^6.0.0"
   },
   "build": {
-    "appId": "net.leanix.archimateMxgraphMapper",
+    "appId": "com.fazendadosoftware.archimateMxgraphMapper",
     "productName": "Archimate MXGraph Mapper",
-    "copyright": "Copyright © 2021 ${author}",
+    "copyright": "Copyright © 2022 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
     },
