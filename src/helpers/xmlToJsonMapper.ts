@@ -162,7 +162,8 @@ const mapExtensionElement = (_element: any, model: Model) => {
     const documentation = properties?.$?.documentation ?? null
     if (type === 'uml:Note') name = documentation
     if (type === 'uml:Text') {
-      console.warn('uml:Text', _element)
+      name = '{{PROJECT_INFO}}'
+      console.log('MODEL', model)
     }
   }
   const element: ExtensionElement = { id: mapId(id), type, name, connectors: links }
@@ -265,9 +266,9 @@ const mapExtension = (xmi: any, model: Model) => {
   if (!isEqual(EXTENDER, { extender, extenderID })) throw Error('invalid model')
   // skipped properties: primitivetypes, profiles
   let {
-    connectors: [{ connector: connectors }] = [],
-    diagrams: [{ diagram: diagrams }] = [],
-    elements: [{ element: elements }] = []
+    connectors: [{ connector: connectors = [] }] = [],
+    diagrams: [{ diagram: diagrams = [] }] = [],
+    elements: [{ element: elements = [] }] = []
   } = _extensions
   if (!Array.isArray(elements)) throw Error(`invalid extensions: ${JSON.stringify(_extensions)}`)
   elements = elements.map(element => mapExtensionElement(element, model))

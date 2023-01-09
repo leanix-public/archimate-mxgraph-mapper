@@ -49,7 +49,17 @@ const drawGraph = (props: DrawGraphProps) => {
           diagram.elements
             .forEach((element: Element) => {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const { id, parent, children, name, rect } = element
+              let { id, parent, children, name, rect, type } = element
+              if (type === 'uml:Text') {
+                const { project = null } = diagram
+                if (project !== null) {
+                  const { name: diagramName } = diagram
+                  const { author, version, created, modified } = project
+                  name = `Name: ${diagramName}\nAuthor: ${author}\nVersion: ${version}\nCreated: ${created}\nUpdated: ${modified}`
+                } else {
+                  return
+                }
+              }
               const geometry = rect === null ? null : [rect.x0, rect.y0, rect.width, rect.height]
               // NOTE: disables parent-child rendering in the diagram
               // const parentNode = parent === null ? defaultParent : vertexIndex[parent] ?? defaultParent

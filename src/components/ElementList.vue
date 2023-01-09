@@ -51,6 +51,7 @@ const { diagram } = toRefs(props)
 const { factSheetIndex, isAuthenticated } = useWorkspace()
 
 const columns: ComputedRef<{ key: keyof Element | 'factSheet' | 'parentName' | 'childrenNames', label: string, classes?: string, component?: any }[]> = computed(() => [
+  { key: 'id', label: 'ID' },
   { key: 'type', label: 'Type', classes: 'font-medium text-gray-900' },
   { key: 'name', label: 'Name' },
   { key: 'childrenNames', label: 'Children', classes: 'whitespace-pre' },
