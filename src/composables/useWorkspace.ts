@@ -14,6 +14,8 @@ const { toast } = useSwal()
 
 const EXTERNAL_ID_DEFAULT_PATH = 'externalId'
 
+export const removeSparxPrefixFromId = (id: string) => id.split('-').slice(1).join('-')
+
 const isAuthenticating = ref(false)
 const accessToken: Ref<null | string> = ref(null)
 const loading = ref(0)
@@ -278,10 +280,9 @@ const buildFactSheetIndex = async (selectedDiagram: Diagram) => {
     .join(' ')
   query = query.replace('{{factSheetTypeExternalIdPlaceholder}}', factSheetTypeExternalIdFragment)
   const externalIds = unref(selectedDiagram).elements
-  // .map(({ id }: { id: string }) => `${externalIdPath}/${id}`)
-    .map(({ id }: { id: string }) => [...id.split('-').slice(1)].join('-'))
+  // stripping await the SPARX PREFIX from ID here...
+    .map(({ id }: { id: string }) => removeSparxPrefixFromId(id))
     .map((id: string) => `${externalIdPath}/${id}`)
-  console.log('EXTERNAL IDS', externalIds)
   const headers = { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json' }
   const body = JSON.stringify({ query, variables: { externalIds } })
   const options = { method: 'POST', headers, body }

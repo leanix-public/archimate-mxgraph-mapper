@@ -44,7 +44,7 @@ import { toRefs, computed, unref, ComputedRef } from 'vue'
 import { Element, Diagram } from '../types'
 import FactSheetCell from './FactSheetCell.vue'
 import LoginToMatchTag from './LoginToMatchTag.vue'
-import useWorkspace from '../composables/useWorkspace'
+import useWorkspace, { removeSparxPrefixFromId } from '../composables/useWorkspace'
 
 const props = defineProps<{ diagram: Diagram }>()
 const { diagram } = toRefs(props)
@@ -69,7 +69,8 @@ const rows = computed(() => {
       const { id, parent: parentId, children: childrenIds = [] } = element
       const { [parentId]: parent = null } = elementIndex
       const childrenNames = ((childrenIds as string[])?.map(id => elementIndex[id]?.name) ?? []).join('\n')
-      const factSheet = unref(factSheetIndex) === null ? null : unref(factSheetIndex)[id]
+      const factSheet = unref(factSheetIndex) === null ? null : unref(factSheetIndex)[removeSparxPrefixFromId(id)]
+      console.log('FACTSHEET', factSheet)
       return { ...element, factSheet, parentName: parent?.name ?? '-', childrenNames: childrenNames }
     })
   return rows
