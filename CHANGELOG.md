@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.8.5] - 2023-01-11
+### Added
+- Added uml:Text element containg the diagram information, when applicable
+### Changed
+- Stripping the Sparx EAID prefix when matching diagram elements to LeanIX factsheets
+
 ## [0.8.4] - 2022-10-27
 ### Added
 - uml:Notes

@@ -14,6 +14,8 @@ const { toast } = useSwal()
 
 const EXTERNAL_ID_DEFAULT_PATH = 'externalId'
 
+export const removeSparxPrefixFromId = (id: string) => id.split('-').slice(1).join('-')
+
 const isAuthenticating = ref(false)
 const accessToken: Ref<null | string> = ref(null)
 const loading = ref(0)
@@ -138,7 +140,8 @@ const enrichXml = async (diagram: Diagram, xml: string): Promise<string> => {
           return accumulator
         }, { attrs: {}, children: [] })
       const { id, ...mxCellAttrs } = attrs
-      const { [id]: factSheet = null } = unref(factSheetIndex)
+      const strippedId = removeSparxPrefixFromId(id)
+      const { [strippedId]: factSheet = null } = unref(factSheetIndex)
       let _rootEle = _root
       if (factSheet !== null) {
         const objectAttrs = {
@@ -151,7 +154,7 @@ const enrichXml = async (diagram: Diagram, xml: string): Promise<string> => {
           resource: factSheet.type,
           subType: '',
           factSheetId: factSheet.id,
-          id: id
+          id: strippedId
         }
         _rootEle = _root.ele('object', objectAttrs)
         delete mxCellAttrs.value
@@ -277,7 +280,10 @@ const buildFactSheetIndex = async (selectedDiagram: Diagram) => {
     .map(factSheetType => `...on ${factSheetType}{${externalIdPath}{externalId}}`)
     .join(' ')
   query = query.replace('{{factSheetTypeExternalIdPlaceholder}}', factSheetTypeExternalIdFragment)
-  const externalIds = unref(selectedDiagram).elements.map(({ id }: { id: string }) => `${externalIdPath}/${id}`)
+  const externalIds = unref(selectedDiagram).elements
+  // stripping await the SPARX PREFIX from ID here...
+    .map(({ id }: { id: string }) => removeSparxPrefixFromId(id))
+    .map((id: string) => `${externalIdPath}/${id}`)
   const headers = { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json' }
   const body = JSON.stringify({ query, variables: { externalIds } })
   const options = { method: 'POST', headers, body }

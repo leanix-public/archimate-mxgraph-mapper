@@ -5,7 +5,7 @@
   "ArchiMate_ApplicationService": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#99ffff;shape=mxgraph.archimate3.application;appType=serv;archiType=rounded",
   "ArchiMate_ApplicationCollaboration": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#99ffff;shape=mxgraph.archimate3.application;appType=collab;archiType=square;",
   "ArchiMate_DataObject": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#99ffff;shape=mxgraph.archimate3.businessObject;overflow=fill;labelBackgroundColor=none;verticalAlign=middle",
-  "ArchiMate_TechnologyObject": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#AFFFAF;shape=mxgraph.archimate3.application;appType=artifact;archiType=square;",
+  "ArchiMate_TechnologyObject": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#AFFFAF;shape=mxgraph.archimate3.businessObject;appType=artifact;archiType=square;",
   "ArchiMate_TechnologyService": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#AFFFAF;shape=mxgraph.archimate3.application;appType=serv;archiType=rounded",
   "ArchiMate_SystemSoftware": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#AFFFAF;shape=mxgraph.archimate3.application;appType=sysSw;archiType=square;",
   "ArchiMate_Stakeholder": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#CCCCFF;shape=mxgraph.archimate3.application;appType=role;archiType=oct;",
@@ -31,6 +31,6 @@
   "ArchiMate_Gap": "html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#E0FFE0;shape=mxgraph.archimate3.gap;",
   "uml:Boundary": "rounded=1;arcSize=6;whiteSpace=wrap;html=1;dashed=1;fillColor=none;verticalAlign=top;align=left;spacingLeft=5;spacingTop=5;",
   "uml:Note": "shape=note;rounded=0;size=10;whiteSpace=wrap;html=1;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=bottom;fontSize=9;space=10;",
-  "uml:Text": "text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontFamily=Helvetica;fontSize=8;fontColor=default;",
+  "uml:Text": "text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontFamily=Helvetica;fontSize=8;fontColor=default;",
   "ArchiMate_Product": "html=1;whiteSpace=wrap;fillColor=#ffff99;shape=mxgraph.archimate3.product;rounded=1;"
 }
