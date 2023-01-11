@@ -161,10 +161,8 @@ const mapExtensionElement = (_element: any, model: Model) => {
   if (properties !== null) {
     const documentation = properties?.$?.documentation ?? null
     if (type === 'uml:Note') name = documentation
-    if (type === 'uml:Text') {
-      name = '{{PROJECT_INFO}}'
-      console.log('MODEL', model)
-    }
+    // this will be the type for the project placeholder (project info: name, author, created, modified, version)
+    if (type === 'uml:Text') name = '{{PROJECT_INFO}}'
   }
   const element: ExtensionElement = { id: mapId(id), type, name, connectors: links }
   return element
