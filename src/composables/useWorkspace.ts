@@ -140,7 +140,8 @@ const enrichXml = async (diagram: Diagram, xml: string): Promise<string> => {
           return accumulator
         }, { attrs: {}, children: [] })
       const { id, ...mxCellAttrs } = attrs
-      const { [id]: factSheet = null } = unref(factSheetIndex)
+      const strippedId = removeSparxPrefixFromId(id)
+      const { [strippedId]: factSheet = null } = unref(factSheetIndex)
       let _rootEle = _root
       if (factSheet !== null) {
         const objectAttrs = {
@@ -153,7 +154,7 @@ const enrichXml = async (diagram: Diagram, xml: string): Promise<string> => {
           resource: factSheet.type,
           subType: '',
           factSheetId: factSheet.id,
-          id: id
+          id: strippedId
         }
         _rootEle = _root.ele('object', objectAttrs)
         delete mxCellAttrs.value

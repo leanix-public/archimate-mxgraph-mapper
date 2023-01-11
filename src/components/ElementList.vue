@@ -70,7 +70,6 @@ const rows = computed(() => {
       const { [parentId]: parent = null } = elementIndex
       const childrenNames = ((childrenIds as string[])?.map(id => elementIndex[id]?.name) ?? []).join('\n')
       const factSheet = unref(factSheetIndex) === null ? null : unref(factSheetIndex)[removeSparxPrefixFromId(id)]
-      console.log('FACTSHEET', factSheet)
       return { ...element, factSheet, parentName: parent?.name ?? '-', childrenNames: childrenNames }
     })
   return rows
