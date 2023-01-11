@@ -277,7 +277,11 @@ const buildFactSheetIndex = async (selectedDiagram: Diagram) => {
     .map(factSheetType => `...on ${factSheetType}{${externalIdPath}{externalId}}`)
     .join(' ')
   query = query.replace('{{factSheetTypeExternalIdPlaceholder}}', factSheetTypeExternalIdFragment)
-  const externalIds = unref(selectedDiagram).elements.map(({ id }: { id: string }) => `${externalIdPath}/${id}`)
+  const externalIds = unref(selectedDiagram).elements
+  // .map(({ id }: { id: string }) => `${externalIdPath}/${id}`)
+    .map(({ id }: { id: string }) => [...id.split('-').slice(1)].join('-'))
+    .map((id: string) => `${externalIdPath}/${id}`)
+  console.log('EXTERNAL IDS', externalIds)
   const headers = { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json' }
   const body = JSON.stringify({ query, variables: { externalIds } })
   const options = { method: 'POST', headers, body }
